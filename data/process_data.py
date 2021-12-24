@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import sqlite3
 import sqlalchemy as sa
-
+#Load data from the two datasets and merge the dataset into a single datframe 
 def load_data(messages_filepath, categories_filepath):
     
     messages = pd.read_csv(messages_filepath)
@@ -15,23 +15,23 @@ def load_data(messages_filepath, categories_filepath):
 
 def clean_data(df):
     
-    categories = df['categories'].str.split(';', expand = True)
+    categories = df['categories'].str.split(';', expand = True) #splitting the categories to pull out the category name
     row = categories.loc[0]
     category_colnames = row.apply(lambda x: x[:-2])
     categories.columns = category_colnames
     
-    for column in categories:
+    for column in categories: #assigning the value taking the last digit as per the category names from the data in the categories
         categories[column] =  pd.DataFrame(x[-1] for x in categories[column].tolist())
         categories[column] = categories[column].astype(int)
     
     df = pd.concat([df.drop('categories', axis = 1), categories], axis = 1)
     
-    df.drop_duplicates(inplace = True)
+    df.drop_duplicates(inplace = True) #removing duplicates
     
     return df
 
 
-def save_data(df, database_filepath):
+def save_data(df, database_filepath): #saving the dataframe in a datbase file
     
     engine = sa.create_engine(f'sqlite:///{database_filepath}')
     df.to_sql('disaster_messages', engine, index=False, if_exists = 'replace') 
