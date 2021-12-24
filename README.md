@@ -61,6 +61,7 @@ Inference: Majority of the messages came from the News and Direct Message genre.
 
 
 2. What are the categories of the messages we have divided our dataset into:
+
 Inference: As per below we have divided the messages into 36 categories as per the scatter plot below:
 
 
