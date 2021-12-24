@@ -39,7 +39,7 @@ model = joblib.load("../models/classifier.pkl")
 def index():
     
     # extract data needed for visuals
-    # TODO: Below is an example - modify to extract data for your own visuals
+   
     genre_counts = df.groupby('genre').count()['message']
     genre_names = list(genre_counts.index)
     x_label = df.drop(['id', 'message', 'original', 'genre'], axis = 1).columns
@@ -50,7 +50,7 @@ def index():
         size.append(values)
     
     # create visuals
-    # TODO: Below is an example - modify to create your own visuals
+    #Using Plotly Bar, Scatter and PIE chart
     graphs = [
         {
             'data': [
