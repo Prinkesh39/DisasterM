@@ -123,7 +123,7 @@ lockfile==0.12.2
 lxml==4.1.1
 Mako==1.0.7
 Markdown==2.6.9
-MarkupSafe==1.0
+MarkupSafe==1.1.0
 matplotlib==2.1.0
 mistune==0.8.3
 mock==2.0.0
