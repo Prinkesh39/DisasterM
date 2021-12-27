@@ -16,63 +16,38 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from sklearn.multioutput import MultiOutputClassifier
 import sqlalchemy as sa
 import pickle
-#Loading data from the Database using SQAlchemy Engine
+
 def load_data(database_filepath):
-    """
-    Loads data from SQLite database.
     
-    Parameters:
-    database_filepath: Filepath to the database
-    
-    Returns:
-    X: Features
-    Y: Target
-    Category-names
-    """    
     engine = sa.create_engine(f'sqlite:///{database_filepath}')
     df = pd.read_sql_table('disaster_messages', engine)
-    X = df['message'] #Feature for our dataset
-    Y = df[df.columns].drop(['id', 'message', 'original', 'genre'], axis = 1) #Target Variable
-    Y.related.replace(2,1,inplace=True) #related category had three values 0, 1, 2
-    category_names = list(df.columns[4:]) 
+    X = df['message']
+    Y = df[df.columns].drop(['id', 'message', 'original', 'genre'], axis = 1)
+    Y.related.replace(2,1,inplace=True)
+    category_names = list(df.columns[4:])
     return X, Y, category_names
-#Cleaning the data
+
 def tokenize(text):
-    """
-    Tokenizes and lemmatizes text.
     
-    Parameters:
-    text: Text to be tokenized
-    
-    Returns:
-    clean_tokens: Returns cleaned tokens 
-    """    
     url_regex = 'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
     detected_urls = re.findall(url_regex, text)
     for url in detected_urls:
         text = text.replace(url, "urlplaceholder")
-    #tokenize text
+
     tokens = word_tokenize(text)
-    #Initailize Lemmatizer
     lemmatizer = WordNetLemmatizer()
 
     clean_tokens = []
-    #iterate through each token
     for tok in tokens:
-        clean_tok = lemmatizer.lemmatize(tok).lower().strip() #lemmatize, normalise, strip leading/trailing white space
+        clean_tok = lemmatizer.lemmatize(tok).lower().strip()
         clean_tokens.append(clean_tok)
 
     return clean_tokens
 
 
 def build_model():
-    """
-    Builds classifier and tunes model using GridSearchCV.
     
-    Returns:
-    cv: Classifier 
-    """        
-    pipeline = Pipeline([('vect', CountVectorizer(tokenizer = tokenize)), #This 
+    pipeline = Pipeline([('vect', CountVectorizer(tokenizer = tokenize)),
                      ('tfidf', TfidfTransformer()),
                      ('clf', MultiOutputClassifier(RandomForestClassifier()))
                     ])
@@ -88,17 +63,7 @@ def build_model():
 
 
 def evaluate_model(model, X_test, Y_test, category_names):
-    """
-    Evaluates the performance of model and returns classification report. 
     
-    Parameters:
-    model: classifier
-    X_test: test dataset
-    Y_test: labels for test data in X_test
-    
-    Returns:
-    Classification report for each column
-    """    
     y_pred = model.predict(X_test)
     
     for index, column in enumerate(Y_test):
@@ -107,12 +72,11 @@ def evaluate_model(model, X_test, Y_test, category_names):
 
 
 def save_model(model, model_filepath):
-    """ Exports the final model as a pickle file."""
+    
     pickle.dump(model, open(model_filepath, 'wb'))
 
 
 def main():
-    """ Builds the model, trains the model, evaluates the model, saves the model."""
     if len(sys.argv) == 3:
         database_filepath, model_filepath = sys.argv[1:]
         print('Loading data...\n    DATABASE: {}'.format(database_filepath))
