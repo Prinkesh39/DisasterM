@@ -1,8 +1,0 @@
-jsonschema==3.2.0
-pandas==0.23.3
-plotly==2.0.15
-SQLAlchemy==1.2.19
-cython==0.29.7
-
-
-
