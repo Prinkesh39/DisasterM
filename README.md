@@ -54,17 +54,15 @@ With this model, we primary looking for three basic questions:
 
 Inference: Majority of the messages came from the News and Direct Message genre. As these are the primary source of information received in case of any adversity. This can be seen from the Bar chart below:
 
-
-
-
-
-
+![Genre](https://github.com/Prinkesh39/DisasterM/blob/main/Message_genre.png?raw=true)
 
 2. What are the categories of the messages we have divided our dataset into:
 
 Inference: As per below we have divided the messages into 36 categories as per the scatter plot below:
 
+![Categories_Scatter](https://github.com/Prinkesh39/DisasterM/blob/main/Message_Categories_Scatter.png?raw=true)
 
+![Categories_Pie](https://github.com/Prinkesh39/DisasterM/blob/main/Message_cat_pie.png?raw=true)
 
 
 3. What is the overall precision we have achieved in correctly classifying a message as per the above categories.
